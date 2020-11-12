@@ -6,6 +6,11 @@ export class AppService {
     console.log(req);
     return 'Hello nahed!';
   }
+
+  init(): string {
+    return 'server up';
+  }
+
   posthello(body): string {
     console.log(body);
     return 'Hello World!';
