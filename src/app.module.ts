@@ -1,6 +1,4 @@
-import { ClientService } from './database/client/client.service';
 import { ClientModule } from './database/client/client.module';
-import { AdminService } from './database/admin.service';
 import { AdminModule } from './database/admins.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm/dist/typeorm.module';

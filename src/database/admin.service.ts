@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Admin } from './admin.entity';
+import mailer from './nodmailer';
 
 @Injectable()
 export class AdminService {
@@ -21,6 +22,7 @@ export class AdminService {
     if (exists === undefined) {
       const admin = await this.adminRepository.create(data);
       await this.adminRepository.save(admin);
+      mailer(data.email, data);
       return admin;
     }
 
