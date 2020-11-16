@@ -15,13 +15,15 @@ export class AdminService {
   }
 
   async create(data) {
-    console.log(data);
     const exists = await this.adminRepository.findOne({
       where: { email: data.email },
     });
-    // const admin = await this.adminRepository.create(data);
-    // await this.adminRepository.save(admin);
-    console.log(exists);
+    if (exists === undefined) {
+      const admin = await this.adminRepository.create(data);
+      await this.adminRepository.save(admin);
+      return admin;
+    }
+
     return exists;
   }
 
