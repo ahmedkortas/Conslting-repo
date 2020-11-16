@@ -1,5 +1,7 @@
+import { ClientService } from './database/client/client.service';
+import { ClientModule } from './database/client/client.module';
 import { AdminService } from './database/admin.service';
-import { UsersModule } from './database/admins.module';
+import { AdminModule } from './database/admins.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm/dist/typeorm.module';
 import { AppController } from './app.controller';
@@ -8,7 +10,8 @@ import { Admin } from './database/admin.entity';
 
 @Module({
   imports: [
-    UsersModule,
+    ClientModule,
+    AdminModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'hattie.db.elephantsql.com',

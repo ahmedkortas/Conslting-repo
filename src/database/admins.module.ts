@@ -9,4 +9,4 @@ import { Admin } from './admin.entity';
   providers: [AdminService],
   controllers: [AdminController],
 })
-export class UsersModule {}
+export class AdminModule {}
