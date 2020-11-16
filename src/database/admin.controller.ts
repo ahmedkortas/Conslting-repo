@@ -6,12 +6,22 @@ export class AdminController {
   constructor(private readonly adminservice: AdminService) {}
 
   @Get('')
-  test1() {
+  getAll() {
     return this.adminservice.findAll();
   }
 
+  @Post('/register/invitation:id')
+  create(@Body() data: any) {
+    return this.adminservice.createByAdmin(data);
+  }
+
+  @Put('/register/invitation/singup:id')
+  SingupViaInvitation(@Param('id') id: string, @Body() data: any) {
+    return this.adminservice.confirmCreateByAdmin(id, data);
+  }
+
   @Post('/register')
-  test(@Body() data: any) {
+  Create(@Body() data: any) {
     return this.adminservice.create(data);
   }
 
@@ -23,6 +33,6 @@ export class AdminController {
   @Put(':id')
   update(@Param('id') id: string, @Body() data: any) {
     console.log(id);
-    return this.adminservice.update(id, data);
+    // return this.adminservice.update(id, data);
   }
 }

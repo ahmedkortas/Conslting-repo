@@ -15,6 +15,30 @@ export class AdminService {
     return this.adminRepository.find();
   }
 
+  async createByAdmin(data: any) {
+    console.log(data);
+    const exists = await this.adminRepository.findOne({
+      where: { email: data.email },
+    });
+    if (exists === undefined) {
+      data.name = 'xXx';
+      data.password = '0000';
+      const admin = await this.adminRepository.create(data);
+      await this.adminRepository.save(admin);
+      mailer(data.email, data);
+      return admin;
+    }
+    return exists;
+  }
+
+  async confirmCreateByAdmin(id, data) {
+    const newAdmin = await this.adminRepository.findOne(id);
+    if (newAdmin.name === 'xXx') {
+      await this.adminRepository.update({ id }, data);
+    }
+    return this.adminRepository.findOne(id);
+  }
+
   async create(data) {
     const exists = await this.adminRepository.findOne({
       where: { email: data.email },

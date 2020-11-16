@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const smtpTransport = require('nodemailer-smtp-transport');
 
-const mailer = (emailR: string, obj: any) => {
+const mailer = (emailR: string, msg: any) => {
   console.log('hey');
 
   var transporter = nodemailer.createTransport(
@@ -24,9 +24,7 @@ const mailer = (emailR: string, obj: any) => {
     from: 'Irada consulting',
     to: `${emailR}`,
     subject: 'TUber new account',
-    text: `Hey Mr/Mrs ${obj.name}, we much appreciate you joining us for the ride.
-      You made the right choice you'll never be late again we can guaranty that.
-      we look forward to your first ride with us we can't wait to have you in one of our cars  `,
+    text: msg,
   };
   transporter.sendMail(mailOptions, (err, info) => {
     console.log('done', emailR);
