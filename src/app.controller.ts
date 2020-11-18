@@ -1,13 +1,14 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { AppService } from './app.service';
 
-@Controller()
+@Controller('test')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  init(): string {
-    return this.appService.init();
+  @Post()
+  init(@Body() data: any): string {
+    console.log(data);
+    return data;
   }
 
   @Get('/nahed')

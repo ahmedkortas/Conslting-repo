@@ -33,6 +33,6 @@ export class AdminController {
   @Put(':id')
   update(@Param('id') id: string, @Body() data: any) {
     console.log(id);
-    // return this.adminservice.update(id, data);
+    return this.adminservice.update(id, data);
   }
 }
