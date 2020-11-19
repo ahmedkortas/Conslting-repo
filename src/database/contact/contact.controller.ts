@@ -4,7 +4,7 @@ import mailer from '../nodmailer';
 @Controller('client/contact')
 export class ContactController {
   @Post()
-  test(@Body() data: any) {
-    mailer(data.email, data.message);
+  contact(@Body() data: any) {
+    mailer(data.email, data.message, data.reason);
   }
 }
