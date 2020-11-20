@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { from } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Repository } from 'typeorm';
+import { AuthService } from '../auth/auth.service';
 import { Client } from './client.entity';
 
 @Injectable()
@@ -8,6 +11,7 @@ export class ClientService {
   constructor(
     @InjectRepository(Client)
     private clientRepository: Repository<Client>,
+    private authService: AuthService,
   ) {}
 
   findAll(): Promise<Client[]> {
@@ -19,12 +23,26 @@ export class ClientService {
       where: { email: data.email },
     });
     if (exists === undefined) {
-      const client = await this.clientRepository.create(data);
-      await this.clientRepository.save(client);
-      return client;
-    }
+      if (exists === undefined) {
+        const passHash = await this.authService.hashPassword(data.password);
+        let client: object = {
+          name: data.name,
+          password: passHash,
+          email: data.email,
+          phoneNumber: data.phoneNumber,
+        };
+        return from(this.clientRepository.save(client)).pipe(
+          map((res: any) => {
+            const { password, ...result } = res;
+            return result;
+          }),
+        );
+      }
 
-    return exists;
+      const { password, ...result } = exists;
+
+      return result;
+    }
   }
 
   findOne(id: string): Promise<Client> {
@@ -39,5 +57,56 @@ export class ClientService {
   async update(id, data) {
     await this.clientRepository.update({ id }, data);
     return this.clientRepository.findOne(id);
+  }
+
+  /**
+   *
+   * @param username
+   * find an admin by username
+   */
+
+  findOneByUsername(email: any) {
+    return this.clientRepository.findOne({
+      where: { email },
+    });
+  }
+
+  /**
+   *
+   * @param data
+   * login confirmation or denied and send the token
+   */
+  async login(data: any) {
+    const confirmed = await this.validate(data);
+    if (confirmed) {
+      const token = await this.authService.generatJWT(data);
+      return token;
+    }
+  }
+
+  /**
+   *
+   * @param data
+   * validate login data
+   */
+
+  async validate(data) {
+    console.log(data);
+    const theClient = await this.findOneByUsername(data.email);
+    if (theClient === undefined) {
+      throw new Error();
+    }
+    console.log(theClient);
+
+    const compare = await this.authService.ComparePassword(
+      theClient.password,
+      data.password,
+    );
+    if (compare) {
+      const { password, ...result } = theClient;
+      return result;
+    } else {
+      throw false;
+    }
   }
 }

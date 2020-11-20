@@ -15,6 +15,11 @@ export class ClientController {
     return this.clientservice.create(data);
   }
 
+  @Post('/login')
+  login(@Body() data: any) {
+    return this.clientservice.login(data);
+  }
+
   @Post('/remove')
   delete(@Body() data: any) {
     return this.clientservice.remove(data);
