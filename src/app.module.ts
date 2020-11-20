@@ -1,3 +1,5 @@
+import { EmployeeModule } from './database/employee/employee.module';
+import { TaskModule } from './database/tasks/task.module';
 import { AuthModule } from './database/auth/auth.module';
 import { AuthService } from './database/auth/auth.service';
 import { ContactModule } from './database/contact/contact.module';
@@ -12,6 +14,8 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
+    EmployeeModule,
+    TaskModule,
     ContactModule,
     ClientModule,
     AdminModule,
