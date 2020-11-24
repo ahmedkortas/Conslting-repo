@@ -19,11 +19,11 @@ export class Task {
   ClientName: string;
 
   @CreateDateColumn()
-  createdAt: Date;
-
-  @Column()
-  startedAt: Date;
+  startDate: Date;
 
   @Column()
   DueDate: Date;
+
+  @Column()
+  status: string;
 }
