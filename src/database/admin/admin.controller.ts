@@ -1,15 +1,5 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Put,
-  Param,
-  UseGuards,
-  Request,
-} from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Controller, Get, Post, Body, Put, Param } from '@nestjs/common';
+
 import { AdminService } from './admin.service';
 
 @Controller('/admin')
@@ -21,8 +11,9 @@ export class AdminController {
     return this.adminservice.findAll();
   }
 
-  @Post('/register/invitation:id')
+  @Post('/register/invitation')
   create(@Body() data: any) {
+    console.log(data);
     return this.adminservice.createByAdmin(data);
   }
 
@@ -42,10 +33,9 @@ export class AdminController {
     return this.adminservice.remove(data);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() data: any) {
-    console.log(id);
-    return this.adminservice.update(id, data);
+  @Put(':email')
+  update(@Param('email') email: string, @Body() data: any) {
+    return this.adminservice.update(email, data);
   }
 
   // @UseGuards(AuthGuard('local'))

@@ -43,6 +43,7 @@ export class AdminService {
         data.email,
         data.message,
         "You've been invited to be an admin in Irada",
+        '',
       );
       return admin;
     }
@@ -88,6 +89,7 @@ export class AdminService {
             data.email,
             'your admin account was successfully saved',
             data.password,
+            '',
           );
           return result;
         }),
@@ -107,7 +109,7 @@ export class AdminService {
 
   findOneByUsername(username: any) {
     return this.adminRepository.findOne({
-      where: { name: username },
+      where: { email: username },
     });
   }
 
@@ -119,9 +121,12 @@ export class AdminService {
 
   async login(data: any) {
     const confirmed = await this.validate(data);
+    console.log(confirmed);
     if (confirmed) {
       const token = await this.authService.generatJWT(data);
       return token;
+    } else {
+      return false;
     }
   }
 
@@ -133,10 +138,11 @@ export class AdminService {
 
   async validate(data) {
     console.log(data);
-    const theAdmin = await this.findOneByUsername(data.name);
+    const theAdmin = await this.findOneByUsername(data.email);
     if (theAdmin === undefined) {
-      throw new Error();
+      return;
     }
+    console.log(theAdmin);
     const compare = await this.authService.ComparePassword(
       theAdmin.password,
       data.password,
@@ -145,7 +151,7 @@ export class AdminService {
       const { password, ...result } = theAdmin;
       return result;
     } else {
-      throw false;
+      return false;
     }
   }
   /**
@@ -174,8 +180,21 @@ export class AdminService {
    * find one by email and update it
    */
 
-  async update(id, data) {
-    await this.adminRepository.update({ id }, data);
-    return this.adminRepository.findOne(id);
+  async update(email, data) {
+    console.log(data);
+    const confir = await this.validate(data);
+    console.log(confir, 'ggg');
+    if (confir !== false) {
+      data.password = data.newPassword;
+      const notEqual = await this.validate(data);
+      if (!notEqual) {
+        const passHash = await this.authService.hashPassword(data.password);
+        let obj = { password: passHash };
+        console.log(obj);
+        return await this.adminRepository.update({ email }, obj);
+      } else {
+        return false;
+      }
+    }
   }
 }

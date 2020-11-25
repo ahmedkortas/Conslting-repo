@@ -5,6 +5,6 @@ import mailer from '../nodmailer';
 export class ContactController {
   @Post()
   contact(@Body() data: any) {
-    mailer(data.email, data.message, data.reason);
+    mailer(data.email, data.message, data.reason, '');
   }
 }

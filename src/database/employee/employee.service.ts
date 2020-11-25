@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { Repository } from 'typeorm';
 import { AuthService } from '../auth/auth.service';
 import { Employee } from './employee.entity';
+import mailer from '../nodmailer';
 
 @Injectable()
 export class EmployeeService {
@@ -33,6 +34,10 @@ export class EmployeeService {
         };
         return from(this.employeeRepository.save(employee)).pipe(
           map((res: any) => {
+            let msg = `hey dear ${res.name},we are proud to have you 
+            in our familly we hope that we will work together for a long
+            tine`;
+            mailer(res.email, msg, 'Welcom dear new Employee', '');
             const { password, ...result } = res;
             return result;
           }),

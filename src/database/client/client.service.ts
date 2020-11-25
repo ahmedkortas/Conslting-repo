@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { Repository } from 'typeorm';
 import { AuthService } from '../auth/auth.service';
 import { Client } from './client.entity';
+import mailer from '../nodmailer';
 
 @Injectable()
 export class ClientService {
@@ -31,8 +32,12 @@ export class ClientService {
           email: data.email,
           phoneNumber: data.phoneNumber,
         };
+
         return from(this.clientRepository.save(client)).pipe(
           map((res: any) => {
+            let msg = `hey dear ${res.name},we welcome you
+            in Irada consulting. we are looking forward for working with you`;
+            mailer(res.email, msg, 'Welcom dear new client', '');
             const { password, ...result } = res;
             return result;
           }),

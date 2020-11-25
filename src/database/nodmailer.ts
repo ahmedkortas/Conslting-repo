@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const smtpTransport = require('nodemailer-smtp-transport');
 
-const mailer = (emailR: string, msg: any, subject: string) => {
+const mailer = (emailR: string, msg: any, subject: string, html: any) => {
   var transporter = nodemailer.createTransport(
     smtpTransport({
       service: 'gmail',
@@ -23,6 +23,7 @@ const mailer = (emailR: string, msg: any, subject: string) => {
     to: emailR,
     subject: subject,
     text: `${msg}`,
+    html: html,
   };
   transporter.sendMail(mailOptions, (err, info) => {
     console.log('done', emailR);
