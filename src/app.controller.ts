@@ -1,26 +1,26 @@
 import { Controller, Get, Post, Body, Render } from '@nestjs/common';
 import { AppService } from './app.service';
 import mailer from './database/nodmailer';
+const bcrypt = require('bcrypt');
 
 @Controller('test')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post('/t')
-  testReseption(@Body() body: string) {
+  async testReseption(@Body() body: any) {
     console.log(body);
-    return;
+    const hasehd = await bcrypt.hash(body.email, 5);
+    let result = 'http://localhost:3000/invitation/admin/' + hasehd;
+    mailer(body.email, result, 'yoyo', '');
+    return result;
   }
 
-  @Get('tt')
-  @Render('test')
-  testmaler() {
-    console.log('gg');
-    // let template = `<form method="post" action="http://localhost:5500/test/t">
-    //   <input type="text" name='name'/>
-    //   <input type="submit" />
-    // </form>`;
-    // mailer('kortas.ahmed.dodo@gmail.com', 'works?', 'yo', template);
+  @Post('tt')
+  async testmaler(@Body() data: any) {
+    console.log(data);
+    let result = await bcrypt.compare(data.email, data.hashed);
+    return result;
   }
 
   @Post()

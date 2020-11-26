@@ -6,6 +6,7 @@ import mailer from '../nodmailer';
 import { map, switchMap } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
 import { from, Observable } from 'rxjs';
+const bcrypt = require('bcrypt');
 
 @Injectable()
 export class AdminService {
@@ -35,16 +36,19 @@ export class AdminService {
       where: { email: data.email },
     });
     if (exists === undefined) {
+      const hasehd = await bcrypt.hash(data.email, 5);
+      let result = 'http://localhost:3000/invitation/admin/' + hasehd;
+      mailer(
+        data.email,
+        result,
+        " You've been invited to be an admin in Irada",
+        '',
+      );
       data.name = 'xXx';
       data.password = '0000';
       const admin = await this.adminRepository.create(data);
       await this.adminRepository.save(admin);
-      mailer(
-        data.email,
-        data.message,
-        "You've been invited to be an admin in Irada",
-        '',
-      );
+
       return admin;
     }
     return exists;
@@ -103,13 +107,13 @@ export class AdminService {
 
   /**
    *
-   * @param username
-   * find an admin by username
+   * @param email
+   * find an admin by email
    */
 
-  findOneByUsername(username: any) {
+  findOneByEmail(email: string) {
     return this.adminRepository.findOne({
-      where: { email: username },
+      where: { email },
     });
   }
 
@@ -138,7 +142,7 @@ export class AdminService {
 
   async validate(data) {
     console.log(data);
-    const theAdmin = await this.findOneByUsername(data.email);
+    const theAdmin = await this.findOneByEmail(data.email);
     if (theAdmin === undefined) {
       return;
     }
@@ -182,14 +186,12 @@ export class AdminService {
 
   async update(email, data) {
     console.log(data);
-    const confir = await this.validate(data);
-    console.log(confir, 'ggg');
-    if (confir !== false) {
-      data.password = data.newPassword;
+    const user = await this.adminRepository.findOne({ email });
+    if (user) {
       const notEqual = await this.validate(data);
       if (!notEqual) {
         const passHash = await this.authService.hashPassword(data.password);
-        let obj = { password: passHash };
+        let obj = { password: passHash, name: data.name };
         console.log(obj);
         return await this.adminRepository.update({ email }, obj);
       } else {

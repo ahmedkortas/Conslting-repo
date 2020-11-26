@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Put, Param } from '@nestjs/common';
-
+const bcrypt = require('bcrypt');
+import mailer from '../nodmailer';
 import { AdminService } from './admin.service';
 
 @Controller('/admin')
@@ -12,7 +13,7 @@ export class AdminController {
   }
 
   @Post('/register/invitation')
-  create(@Body() data: any) {
+  async create(@Body() data: any) {
     console.log(data);
     return this.adminservice.createByAdmin(data);
   }
@@ -33,9 +34,18 @@ export class AdminController {
     return this.adminservice.remove(data);
   }
 
-  @Put(':email')
-  update(@Param('email') email: string, @Body() data: any) {
-    return this.adminservice.update(email, data);
+  @Put('/register/invitation/singup')
+  async update(@Body() data: any) {
+    let result = await bcrypt.compare(data.email, data.hashed);
+    console.log(data);
+    console.log(result, 'hey');
+    if (result) {
+      let { hashed, ...b } = data;
+      console.log(b, 'hhhhhhhhhhhhhhhhhhhhhhhh');
+      return this.adminservice.update(data.email, b);
+    } else {
+      return false;
+    }
   }
 
   // @UseGuards(AuthGuard('local'))
