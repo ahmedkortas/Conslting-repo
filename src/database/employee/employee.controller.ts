@@ -25,9 +25,8 @@ export class EmployeeController {
     return this.EmployeeService.remove(data);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() data: any) {
-    console.log(id);
-    return this.EmployeeService.update(id, data);
+  @Put('/update')
+  update(@Body() data: any) {
+    return this.EmployeeService.update(data);
   }
 }

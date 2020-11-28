@@ -59,9 +59,10 @@ export class EmployeeService {
     return { delete: true };
   }
 
-  async update(id, data) {
-    await this.employeeRepository.update({ id }, data);
-    return this.employeeRepository.findOne(id);
+  async update(data) {
+    let email = data.email;
+    await this.employeeRepository.update({ email }, data);
+    return this.employeeRepository.findOne({ email });
   }
 
   /**
@@ -96,10 +97,9 @@ export class EmployeeService {
    */
 
   async validate(data) {
-    console.log(data);
     const theEmployee = await this.findOneByUsername(data.email);
     if (theEmployee === undefined) {
-      throw new Error();
+      return false;
     }
 
     const compare = await this.authService.ComparePassword(
@@ -110,7 +110,7 @@ export class EmployeeService {
       const { password, ...result } = theEmployee;
       return result;
     } else {
-      throw false;
+      return false;
     }
   }
 }
