@@ -20,6 +20,11 @@ export class TaskController {
     return this.taskService.findAll();
   }
 
+  @Get('/Employee')
+  getAllForEmployee(@Body() data: string) {
+    return this.taskService.findAllEmployeeTask(data);
+  }
+
   @Post('/create')
   create(@Body() data: any) {
     return this.taskService.create(data);

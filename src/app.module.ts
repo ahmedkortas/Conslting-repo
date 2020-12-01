@@ -1,3 +1,6 @@
+import { MainRefController } from './database/mainRef/mainref.controller';
+import { MainRefService } from './database/mainRef/mainref.service';
+import { MainRefModule } from './database/mainRef/mainref.module';
 import { EmployeeModule } from './database/employee/employee.module';
 import { TaskModule } from './database/tasks/task.module';
 import { AuthModule } from './database/auth/auth.module';
@@ -14,6 +17,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
+    MainRefModule,
     EmployeeModule,
     TaskModule,
     ContactModule,

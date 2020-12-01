@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-@Unique(['email'])
+@Unique(['email', 'name'])
 export class Employee {
   @PrimaryGeneratedColumn()
   id: number;

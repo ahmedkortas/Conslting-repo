@@ -13,6 +13,11 @@ export class TaskService {
     return this.taskRepository.find();
   }
 
+  findAllEmployeeTask(data): Promise<Task[]> {
+    let { EmployeeName } = data;
+    return this.taskRepository.find({ EmployeeName });
+  }
+
   async create(task: Task): Promise<Task> {
     const admin = await this.taskRepository.create(task);
     return this.taskRepository.save(admin);
