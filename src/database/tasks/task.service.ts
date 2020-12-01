@@ -1,20 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { EmployeeService } from '../employee/employee.service';
 import { Task } from './task.entity';
 
 export class TaskService {
   constructor(
     @InjectRepository(Task)
     private taskRepository: Repository<Task>,
+    private employee: EmployeeService,
   ) {}
 
   findAll(): Promise<Task[]> {
     return this.taskRepository.find();
   }
 
-  findAllEmployeeTask(data): Promise<Task[]> {
-    let { EmployeeName } = data;
+  async findAllEmployeeTask(data) {
+    let { email } = data;
+    let Employee = await this.employee.findOneByUsername(email);
+    let EmployeeName = Employee.name;
     return this.taskRepository.find({ EmployeeName });
   }
 
