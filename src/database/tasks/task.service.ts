@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import e from 'express';
 import { Repository } from 'typeorm';
 import { EmployeeService } from '../employee/employee.service';
 import { Task } from './task.entity';
@@ -17,7 +18,9 @@ export class TaskService {
 
   async findAllEmployeeTask(data) {
     let { email } = data;
+    console.log(email);
     let Employee = await this.employee.findOneByUsername(email);
+    console.log(Employee);
     let EmployeeName = Employee.name;
     return this.taskRepository.find({ EmployeeName });
   }
@@ -26,4 +29,6 @@ export class TaskService {
     const admin = await this.taskRepository.create(task);
     return this.taskRepository.save(admin);
   }
+
+  async update(data: object) {}
 }

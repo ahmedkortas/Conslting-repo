@@ -29,4 +29,9 @@ export class TaskController {
   create(@Body() data: any) {
     return this.taskService.create(data);
   }
+
+  @Put('/update')
+  update(@Body() data: any) {
+    return this.taskService.update(data);
+  }
 }
