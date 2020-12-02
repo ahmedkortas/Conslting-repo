@@ -20,6 +20,6 @@ export class MainRef {
   @Column()
   date: Date;
 
-  @Column()
+  @Column('integer', { default: 0 })
   vue: number;
 }
