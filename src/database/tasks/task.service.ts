@@ -18,11 +18,11 @@ export class TaskService {
 
   async findAllEmployeeTask(data) {
     let { email } = data;
-    console.log(email);
+    console.log(data);
     let Employee = await this.employee.findOneByUsername(email);
     console.log(Employee);
     let EmployeeName = Employee.name;
-    return this.taskRepository.find({ EmployeeName });
+    return this.taskRepository.find();
   }
 
   async create(task: Task): Promise<Task> {

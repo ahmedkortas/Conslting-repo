@@ -20,8 +20,9 @@ export class TaskController {
     return this.taskService.findAll();
   }
 
-  @Get('/Employee')
+  @Post('/Employee')
   getAllForEmployee(@Body() data: string) {
+    console.log(data);
     return this.taskService.findAllEmployeeTask(data);
   }
 
