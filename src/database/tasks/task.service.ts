@@ -30,5 +30,10 @@ export class TaskService {
     return this.taskRepository.save(admin);
   }
 
-  async update(data: object) {}
+  async update(data: any) {
+    let id = data.id;
+    await this.taskRepository.update({ id }, data);
+    console.log(data);
+    return this.taskRepository.findOne(id);
+  }
 }
