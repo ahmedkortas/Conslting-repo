@@ -37,7 +37,8 @@ export class AdminService {
     });
     if (exists === undefined) {
       const hasehd = await bcrypt.hash(data.email, 5);
-      let result = 'http://localhost:3000/invitation/admin/' + hasehd;
+      let result =
+        'https://irada-admin-app.herokuapp.com/invitation/admin/' + hasehd;
       mailer(
         data.email,
         result,
@@ -192,7 +193,6 @@ export class AdminService {
       if (!notEqual) {
         const passHash = await this.authService.hashPassword(data.password);
         let obj = { password: passHash, name: data.name };
-        console.log(obj);
         return await this.adminRepository.update({ email }, obj);
       } else {
         return false;

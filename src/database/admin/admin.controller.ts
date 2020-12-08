@@ -37,11 +37,8 @@ export class AdminController {
   @Put('/register/invitation/singup')
   async update(@Body() data: any) {
     let result = await bcrypt.compare(data.email, data.hashed);
-    console.log(data);
-    console.log(result, 'hey');
     if (result) {
       let { hashed, ...b } = data;
-      console.log(b, 'hhhhhhhhhhhhhhhhhhhhhhhh');
       return this.adminservice.update(data.email, b);
     } else {
       return false;
@@ -53,10 +50,4 @@ export class AdminController {
   async login(@Body() data: any) {
     return await this.adminservice.login(data);
   }
-
-  // @Post('/test')
-  // test1(@Body() data: any) {
-  //   console.log('test1', data.name);
-
-  // }
 }
