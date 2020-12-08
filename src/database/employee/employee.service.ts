@@ -59,6 +59,12 @@ export class EmployeeService {
     return { delete: true };
   }
 
+  findOneByUsername(data: any) {
+    return this.employeeRepository.findOne({
+      where: { name: data },
+    });
+  }
+
   async update(data) {
     let email = data.email;
     await this.employeeRepository.update({ email }, data);
@@ -71,7 +77,7 @@ export class EmployeeService {
    * find an admin by username
    */
 
-  findOneByUsername(email: any) {
+  findOneByEmail(email: any) {
     return this.employeeRepository.findOne({
       where: { email },
     });

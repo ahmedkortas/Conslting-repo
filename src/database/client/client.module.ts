@@ -10,5 +10,6 @@ import { AdminModule } from '../admin/admins.module';
   imports: [TypeOrmModule.forFeature([Client]), AuthModule, AdminModule],
   controllers: [ClientController],
   providers: [ClientService],
+  exports: [ClientService],
 })
 export class ClientModule {}

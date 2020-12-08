@@ -50,6 +50,10 @@ export class ClientService {
     }
   }
 
+  findOneByName(name: any): Promise<Client> {
+    return this.clientRepository.findOne({ name });
+  }
+
   findOne(id: string): Promise<Client> {
     return this.clientRepository.findOne(id);
   }
