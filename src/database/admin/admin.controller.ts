@@ -14,7 +14,6 @@ export class AdminController {
 
   @Post('/register/invitation')
   async create(@Body() data: any) {
-    console.log(data);
     return this.adminservice.createByAdmin(data);
   }
 
